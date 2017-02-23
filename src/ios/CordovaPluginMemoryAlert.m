@@ -56,50 +56,22 @@
 - (void)onMemoryWarning
 {
     
-    struct mach_task_basic_info info;
-    mach_msg_type_number_t size = sizeof(info);
-    kern_return_t kerr = task_info(mach_task_self(), MACH_TASK_BASIC_INFO, (task_info_t)&info, &size);
-    if (kerr == KERN_SUCCESS)
-    {
-        float used_bytes = info.resident_size;
-        float total_bytes = [NSProcessInfo processInfo].physicalMemory;
+    //struct mach_task_basic_info info;
+    //mach_msg_type_number_t size = sizeof(info);
+    //kern_return_t kerr = task_info(mach_task_self(), MACH_TASK_BASIC_INFO, (task_info_t)&info, &size);
+    //if (kerr == KERN_SUCCESS)
+    //{
+        float used_bytes = 100; //info.resident_size;
+        float total_bytes = 200; //[NSProcessInfo processInfo].physicalMemory;
         float percent = used_bytes / total_bytes;
         //NSLog(@"Used: %f MB out of %f MB (%f%%)", used_bytes / 1024.0f / 1024.0f, total_bytes / 1024.0f / 1024.0f, used_bytes * 100.0f / total_bytes);
-    }
+    //}
     
     if (!activated) return;
     NSString *jsCommand = [@[@"cordova.fireWindowEvent('", escapedMemoryWarningEventName, @"',{percent:", percent, @", used:", used_bytes, @"});"] componentsJoinedByString:@""];
     [self.commandDelegate evalJs:jsCommand];
-    NSLog(@"cordova-plugin-memory-alert: did received a memory warning, emitting `%@` on window", memoryWarningEventName);}
-
-- (float)__getMemoryUsedPer1
-{
-    struct mach_task_basic_info info;
-    mach_msg_type_number_t size = sizeof(info);
-    kern_return_t kerr = task_info(mach_task_self(), MACH_TASK_BASIC_INFO, (task_info_t)&info, &size);
-    if (kerr == KERN_SUCCESS)
-    {
-        float used_bytes = info.resident_size;
-        float total_bytes = [NSProcessInfo processInfo].physicalMemory;
-        //NSLog(@"Used: %f MB out of %f MB (%f%%)", used_bytes / 1024.0f / 1024.0f, total_bytes / 1024.0f / 1024.0f, used_bytes * 100.0f / total_bytes);
-        return used_bytes / total_bytes;
-    }
-    return 1;
+    NSLog(@"cordova-plugin-memory-alert: did received a memory warning, emitting `%@` on window", memoryWarningEventName);
 }
 
-- (float)__getMemoryUsedPer2
-{
-    struct mach_task_basic_info info;
-    mach_msg_type_number_t size = sizeof(info);
-    kern_return_t kerr = task_info(mach_task_self(), MACH_TASK_BASIC_INFO, (task_info_t)&info, &size);
-    if (kerr == KERN_SUCCESS)
-    {
-        float used_bytes = info.resident_size;
-        float total_bytes = [NSProcessInfo processInfo].physicalMemory;
-        //NSLog(@"Used: %f MB out of %f MB (%f%%)", used_bytes / 1024.0f / 1024.0f, total_bytes / 1024.0f / 1024.0f, used_bytes * 100.0f / total_bytes);
-        return used_bytes;
-    }
-    return 1;
-}
 
 @end
