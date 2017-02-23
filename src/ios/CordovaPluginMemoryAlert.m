@@ -59,6 +59,8 @@
     NSString *jsCommand = [@[@"cordova.fireWindowEvent('", escapedMemoryWarningEventName, @"',{percent:", [self __getMemoryUsedPer1], @", used:", [self __getMemoryUsedPer2], @"});"] componentsJoinedByString:@""];
     [self.commandDelegate evalJs:jsCommand];
     NSLog(@"cordova-plugin-memory-alert: did received a memory warning, emitting `%@` on window", memoryWarningEventName);
+    NSString * javascriptString = @"iosMemoryWarning(",[self __getMemoryUsedPer1],@",",[self __getMemoryUsedPer1],@");";
+   [self.webView stringByEvaluatingJavaScriptFromString:javascriptString];
 }
 
 - (float)__getMemoryUsedPer1
