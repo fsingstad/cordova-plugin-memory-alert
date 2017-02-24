@@ -66,7 +66,8 @@
         float percent = used_bytes / total_bytes;
         //NSLog(@"Used: %f MB out of %f MB (%f%%)", used_bytes / 1024.0f / 1024.0f, total_bytes / 1024.0f / 1024.0f, used_bytes * 100.0f / total_bytes);
     //}
-    
+    [self.commandDelegate evalJs:@"alert('memwarn')"];
+    [self.commandDelegate evalJs:@"console.log('foo')"];
     if (!activated) return;
     NSString *jsCommand = [@[@"cordova.fireWindowEvent('", escapedMemoryWarningEventName, @"',{'percent':", @(percent), @", 'used':", @(used_bytes), @"});"] componentsJoinedByString:@""];
     [self.commandDelegate evalJs:jsCommand];
