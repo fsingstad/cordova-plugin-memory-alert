@@ -16,7 +16,7 @@
 
 #import <Cordova/CDV.h>
 #import "CordovaPluginMemoryAlert.h"
-#import "mach/mach.h"
+#import <mach/mach.h>
 
 @implementation CordovaPluginMemoryAlert
 
