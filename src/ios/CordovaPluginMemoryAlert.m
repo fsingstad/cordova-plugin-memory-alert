@@ -16,6 +16,7 @@
 
 #import <Cordova/CDV.h>
 #import "CordovaPluginMemoryAlert.h"
+#import "mach/mach.h"
 
 @implementation CordovaPluginMemoryAlert
 
@@ -56,16 +57,16 @@
 - (void)onMemoryWarning
 {
     
-    //struct mach_task_basic_info info;
-    //mach_msg_type_number_t size = sizeof(info);
-    //kern_return_t kerr = task_info(mach_task_self(), MACH_TASK_BASIC_INFO, (task_info_t)&info, &size);
-    //if (kerr == KERN_SUCCESS)
-    //{
-        float used_bytes = 100; //info.resident_size;
-        float total_bytes = 200; //[NSProcessInfo processInfo].physicalMemory;
+    struct mach_task_basic_info info;
+    mach_msg_type_number_t size = sizeof(info);
+    kern_return_t kerr = task_info(mach_task_self(), MACH_TASK_BASIC_INFO, (task_info_t)&info, &size);
+    if (kerr == KERN_SUCCESS)
+    {
+        float used_bytes = info.resident_size;
+        float total_bytes = [NSProcessInfo processInfo].physicalMemory;
         float percent = used_bytes / total_bytes;
         //NSLog(@"Used: %f MB out of %f MB (%f%%)", used_bytes / 1024.0f / 1024.0f, total_bytes / 1024.0f / 1024.0f, used_bytes * 100.0f / total_bytes);
-    //}
+    }
     //[self.commandDelegate evalJs:@"alert('memwarn')"];
     if (!activated) return;
     NSString *jsCommand = [@[@"nativeWarning('", escapedMemoryWarningEventName, @"',{'percent':", @(percent), @", 'used':", @(used_bytes), @"});"] componentsJoinedByString:@""];
